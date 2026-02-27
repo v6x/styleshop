@@ -12,9 +12,12 @@ export function BuyNowButton({ product }: { product: Product }) {
   const handleClick = () => {
     addItem(product);
 
-    // BROKEN: price, product_name, source 속성이 누락됨
+    // BROKEN: price, product_name, source 속성이 누락됨 -> 수정됨
     track("click_buy_now", {
       product_id: product.id,
+      product_name: product.name,
+      price: product.price,
+      source: "product_detail_page",
     });
 
     router.push("/checkout");
