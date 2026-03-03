@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { useCart } from "@/lib/cart-store";
+import { useWishlist } from "@/lib/wishlist-store";
 
 export function Header() {
   const { totalItems } = useCart();
+  const { count: wishlistCount } = useWishlist();
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
@@ -19,6 +21,17 @@ export function Header() {
               className="text-gray-600 hover:text-gray-900"
             >
               Products
+            </Link>
+            <Link
+              href="/wishlist"
+              className="relative text-gray-600 hover:text-gray-900"
+            >
+              Wishlist
+              {wishlistCount > 0 && (
+                <span className="absolute -top-2 -right-4 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {wishlistCount}
+                </span>
+              )}
             </Link>
             <Link
               href="/cart"

@@ -7,6 +7,10 @@ import { getProduct } from "@/lib/products";
 import { track } from "@/lib/analytics/track";
 import { AddToCartButton } from "@/components/add-to-cart-button";
 import { BuyNowButton } from "@/components/buy-now-button";
+import { VariantSelector } from "@/components/variant-selector";
+import { WishlistButton } from "@/components/wishlist-button";
+import { RecentlyViewed } from "@/components/recently-viewed";
+import { useRecentlyViewed } from "@/lib/hooks/use-recently-viewed";
 
 export default function ProductDetailPage({
   params,
@@ -15,6 +19,8 @@ export default function ProductDetailPage({
 }) {
   const { id } = use(params);
   const product = getProduct(id);
+  const { items: recentlyViewed, add: addToRecentlyViewed } =
+    useRecentlyViewed();
 
   useEffect(() => {
     if (product) {
@@ -24,8 +30,9 @@ export default function ProductDetailPage({
         price: product.price,
         category: product.category,
       });
+      addToRecentlyViewed(product);
     }
-  }, [product]);
+  }, [product, addToRecentlyViewed]);
 
   if (!product) {
     notFound();
@@ -52,7 +59,10 @@ export default function ProductDetailPage({
 
         {/* Info */}
         <div className="flex flex-col">
-          <p className="text-sm text-gray-500 mb-2">{product.category}</p>
+          <div className="flex items-start justify-between">
+            <p className="text-sm text-gray-500 mb-2">{product.category}</p>
+            <WishlistButton product={product} />
+          </div>
           <h1 className="text-2xl font-bold mb-4">{product.name}</h1>
 
           <div className="flex items-center gap-2 mb-4">
@@ -73,9 +83,14 @@ export default function ProductDetailPage({
             )}
           </div>
 
-          <p className="text-gray-600 mb-8 leading-relaxed">
+          <p className="text-gray-600 mb-6 leading-relaxed">
             {product.description}
           </p>
+
+          {/* Variant Selector */}
+          <div className="mb-6">
+            <VariantSelector product={product} />
+          </div>
 
           <div className="flex flex-col gap-3 mt-auto">
             <AddToCartButton product={product} />
@@ -83,6 +98,9 @@ export default function ProductDetailPage({
           </div>
         </div>
       </div>
+
+      {/* Recently Viewed */}
+      <RecentlyViewed items={recentlyViewed} currentProductId={product.id} />
     </div>
   );
 }

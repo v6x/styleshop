@@ -1,37 +1,49 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { products } from "@/lib/products";
 import { ProductCard } from "@/components/product-card";
-import { track } from "@/lib/analytics/track";
+import { FilterBar } from "@/components/filter-bar";
 
 export default function ProductsPage() {
   const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("All");
+  const [sort, setSort] = useState("default");
 
-  const filtered = query
-    ? products.filter(
-        (p) =>
-          p.name.includes(query) ||
-          p.category.includes(query) ||
-          p.description.includes(query),
-      )
-    : products;
+  const filtered = useMemo(() => {
+    let result = products;
 
-  const handleSearch = (value: string) => {
-    setQuery(value);
-    if (value.trim()) {
-      const results = products.filter(
-        (p) =>
-          p.name.includes(value) ||
-          p.category.includes(value) ||
-          p.description.includes(value),
-      );
-      track("search_executed", {
-        query: value,
-        results_count: results.length,
-      });
+    // Category filter
+    if (category !== "All") {
+      result = result.filter((p) => p.category === category);
     }
-  };
+
+    // Search filter
+    if (query) {
+      const q = query.toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q) ||
+          p.description.toLowerCase().includes(q),
+      );
+    }
+
+    // Sort
+    switch (sort) {
+      case "price_asc":
+        result = [...result].sort((a, b) => a.price - b.price);
+        break;
+      case "price_desc":
+        result = [...result].sort((a, b) => b.price - a.price);
+        break;
+      case "rating":
+        result = [...result].sort((a, b) => b.rating - a.rating);
+        break;
+    }
+
+    return result;
+  }, [query, category, sort]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -40,16 +52,15 @@ export default function ProductsPage() {
         <span className="text-sm text-gray-500">{filtered.length} products</span>
       </div>
 
-      {/* Search */}
-      <div className="mb-8">
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => handleSearch(e.target.value)}
-          placeholder="Search products..."
-          className="w-full max-w-md border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900"
-        />
-      </div>
+      <FilterBar
+        query={query}
+        category={category}
+        sort={sort}
+        resultsCount={filtered.length}
+        onQueryChange={setQuery}
+        onCategoryChange={setCategory}
+        onSortChange={setSort}
+      />
 
       {/* Product Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -60,7 +71,7 @@ export default function ProductsPage() {
 
       {filtered.length === 0 && (
         <p className="text-center text-gray-500 py-12">
-          No results found for &quot;{query}&quot;.
+          No results found{query ? ` for "${query}"` : ""}.
         </p>
       )}
     </div>

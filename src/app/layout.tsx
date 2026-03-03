@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { AmplitudeProvider } from "@/lib/analytics/provider";
 import { CartProvider } from "@/lib/cart-store";
+import { WishlistProvider } from "@/lib/wishlist-store";
+import { ToastProvider } from "@/components/toast-provider";
 import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 import { PageTracker } from "@/components/page-tracker";
 import "./globals.css";
 
@@ -34,9 +37,14 @@ export default function RootLayout({
       <body className="bg-gray-50 text-gray-900 antialiased">
         <AmplitudeProvider>
           <CartProvider>
-            <Header />
-            <PageTracker />
-            <main>{children}</main>
+            <WishlistProvider>
+              <ToastProvider>
+                <Header />
+                <PageTracker />
+                <main>{children}</main>
+                <Footer />
+              </ToastProvider>
+            </WishlistProvider>
           </CartProvider>
         </AmplitudeProvider>
       </body>

@@ -1,21 +1,81 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/lib/cart-store";
 import { track } from "@/lib/analytics/track";
 import { trackLegacyPurchase } from "@/lib/analytics/track";
 import { CouponInput } from "@/components/coupon-input";
+import { CheckoutProgress } from "@/components/checkout-progress";
+import { ShippingStep } from "./steps/shipping-step";
+import { PaymentStep } from "./steps/payment-step";
+import { ReviewStep } from "./steps/review-step";
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, totalPrice, totalItems, clearCart } = useCart();
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState("");
+  const [step, setStep] = useState(1);
+  const [shippingData, setShippingData] = useState({
+    name: "",
+    address: "",
+    phone: "",
+  });
+
+  // LEGACY: checkout_started — missing deps → fires on every render
+  useEffect(() => {
+    if (items.length > 0) {
+      track("checkout_started", {
+        item_count: totalItems,
+        cart_total: totalPrice,
+        timestamp: new Date().toISOString(),
+      });
+    }
+  });
+
+  // CLEAN: checkout_step_viewed
+  useEffect(() => {
+    if (items.length > 0) {
+      track("checkout_step_viewed", {
+        step_number: step,
+        step_name: ["shipping", "payment", "review"][step - 1],
+      });
+    }
+  }, [step, items.length]);
+
+  const handleShippingComplete = (data: {
+    name: string;
+    address: string;
+    phone: string;
+  }) => {
+    setShippingData(data);
+
+    // CLEAN: checkout_step_completed for step 1
+    track("checkout_step_completed", {
+      step_number: 1,
+      step_name: "shipping",
+    });
+
+    setStep(2);
+  };
+
+  const handlePaymentComplete = () => {
+    // BROKEN: step 2 uses "step" instead of "step_number" (property name mismatch)
+    track("checkout_step_completed", {
+      step: 2,
+      step_name: "payment",
+    });
+
+    setStep(3);
+  };
 
   const handlePurchase = () => {
     const orderId = `ORD-${Date.now()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+
+    // CLEAN: checkout_step_completed for step 3
+    track("checkout_step_completed", {
+      step_number: 3,
+      step_name: "review",
+    });
 
     // CLEAN: purchase_complete
     track("purchase_complete", {
@@ -57,8 +117,10 @@ export default function CheckoutPage() {
     <div className="max-w-3xl mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-6">Checkout</h1>
 
+      <CheckoutProgress currentStep={step} />
+
       <div className="space-y-6">
-        {/* Order Summary */}
+        {/* Order Summary (always visible) */}
         <div className="bg-white rounded-lg p-6 shadow-sm">
           <h2 className="font-bold mb-4">Order Summary</h2>
           {items.map((item) => (
@@ -81,46 +143,30 @@ export default function CheckoutPage() {
         </div>
 
         {/* Coupon — LEGACY/DUPLICATE event */}
-        <div className="bg-white rounded-lg p-6 shadow-sm">
-          <h2 className="font-bold mb-4">Coupon</h2>
-          <CouponInput />
-        </div>
-
-        {/* Shipping Info */}
-        <div className="bg-white rounded-lg p-6 shadow-sm">
-          <h2 className="font-bold mb-4">Shipping Information</h2>
-          <div className="space-y-4">
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Full Name"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900"
-            />
-            <input
-              type="text"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              placeholder="Shipping Address"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900"
-            />
-            <input
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="Phone Number"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900"
-            />
+        {step === 1 && (
+          <div className="bg-white rounded-lg p-6 shadow-sm">
+            <h2 className="font-bold mb-4">Coupon</h2>
+            <CouponInput />
           </div>
-        </div>
+        )}
 
-        {/* Purchase Button */}
-        <button
-          onClick={handlePurchase}
-          className="w-full bg-gray-900 text-white py-3 rounded-lg hover:bg-gray-800 transition-colors font-bold"
-        >
-          {`Pay $${totalPrice.toFixed(2)}`}
-        </button>
+        {/* Step Content */}
+        {step === 1 && <ShippingStep onNext={handleShippingComplete} />}
+        {step === 2 && (
+          <PaymentStep
+            onNext={handlePaymentComplete}
+            onBack={() => setStep(1)}
+          />
+        )}
+        {step === 3 && (
+          <ReviewStep
+            items={items}
+            totalPrice={totalPrice}
+            shipping={shippingData}
+            onConfirm={handlePurchase}
+            onBack={() => setStep(2)}
+          />
+        )}
       </div>
     </div>
   );

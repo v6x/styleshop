@@ -56,6 +56,14 @@ export default function CartPage() {
 
           <Link
             href="/checkout"
+            onClick={() => {
+              // LEGACY: duplicates checkout_started + abbreviated properties
+              track("evt_checkout_start", {
+                cnt: items.length,
+                amt: totalPrice,
+                ts: Date.now(),
+              });
+            }}
             className="block w-full bg-gray-900 text-white text-center py-3 rounded-lg hover:bg-gray-800 transition-colors"
           >
             Checkout

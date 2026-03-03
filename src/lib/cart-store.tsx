@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import { Product, CartItem } from "./types";
+import { track } from "./analytics/track";
 
 interface CartContextType {
   items: CartItem[];
@@ -36,10 +37,24 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
       return [...prev, { product, quantity: 1 }];
     });
+
+    // LEGACY: catch-all cart event, duplicates individual cart events
+    track("cart_update", {
+      action: "add",
+      pid: product.id,
+      ts: Date.now(),
+    });
   }, []);
 
   const removeItem = useCallback((productId: string) => {
     setItems((prev) => prev.filter((item) => item.product.id !== productId));
+
+    // LEGACY: catch-all cart event
+    track("cart_update", {
+      action: "remove",
+      pid: productId,
+      ts: Date.now(),
+    });
   }, []);
 
   const updateQuantity = useCallback(
@@ -48,13 +63,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setItems((prev) =>
           prev.filter((item) => item.product.id !== productId),
         );
-        return;
+      } else {
+        setItems((prev) =>
+          prev.map((item) =>
+            item.product.id === productId ? { ...item, quantity } : item,
+          ),
+        );
       }
-      setItems((prev) =>
-        prev.map((item) =>
-          item.product.id === productId ? { ...item, quantity } : item,
-        ),
-      );
+
+      // LEGACY: catch-all cart event
+      track("cart_update", {
+        action: "update_qty",
+        pid: productId,
+        qty: quantity,
+        ts: Date.now(),
+      });
     },
     [],
   );

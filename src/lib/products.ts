@@ -12,6 +12,8 @@ export const products: Product[] = [
       "A relaxed oversized blazer that works for both casual and formal occasions. A wardrobe essential.",
     rating: 4.5,
     reviewCount: 128,
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Black", "Navy", "Beige"],
   },
   {
     id: "2",
@@ -22,6 +24,8 @@ export const products: Product[] = [
     description: "A soft cashmere blend knit sweater. Warm yet lightweight for everyday comfort.",
     rating: 4.8,
     reviewCount: 256,
+    sizes: ["XS", "S", "M", "L"],
+    colors: ["Ivory", "Gray", "Pink"],
   },
   {
     id: "3",
@@ -33,6 +37,8 @@ export const products: Product[] = [
       "Wide-leg cotton pants with a relaxed silhouette. Perfect for comfortable daily outfits.",
     rating: 4.3,
     reviewCount: 89,
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["White", "Black", "Khaki"],
   },
   {
     id: "4",
@@ -45,6 +51,8 @@ export const products: Product[] = [
       "A breezy linen blend shirt dress. Features an adjustable waist belt for a custom fit.",
     rating: 4.6,
     reviewCount: 167,
+    sizes: ["XS", "S", "M", "L"],
+    colors: ["White", "Light Blue"],
   },
   {
     id: "5",
@@ -55,6 +63,7 @@ export const products: Product[] = [
     description: "A clean-lined soft leather tote bag with generous storage space.",
     rating: 4.7,
     reviewCount: 203,
+    colors: ["Black", "Brown", "Tan"],
   },
   {
     id: "6",
@@ -67,6 +76,8 @@ export const products: Product[] = [
       "Classic Chelsea boots that pair effortlessly with any outfit. A timeless staple.",
     rating: 4.4,
     reviewCount: 145,
+    sizes: ["7", "8", "9", "10", "11"],
+    colors: ["Black", "Brown"],
   },
   {
     id: "7",
@@ -77,6 +88,7 @@ export const products: Product[] = [
     description: "A soft wool blend scarf. Warm and stylish with a refined design.",
     rating: 4.9,
     reviewCount: 312,
+    colors: ["Charcoal", "Camel", "Burgundy"],
   },
   {
     id: "8",
@@ -88,6 +100,8 @@ export const products: Product[] = [
       "Classic straight-fit denim jeans that go with everything. A true everyday essential.",
     rating: 4.5,
     reviewCount: 198,
+    sizes: ["28", "30", "32", "34", "36"],
+    colors: ["Indigo", "Black", "Light Wash"],
   },
   {
     id: "9",
@@ -99,6 +113,8 @@ export const products: Product[] = [
       "A cozy oversized zip-up hoodie. A must-have for relaxed casual looks.",
     rating: 4.2,
     reviewCount: 176,
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Gray", "Black", "Navy"],
   },
   {
     id: "10",
@@ -111,6 +127,8 @@ export const products: Product[] = [
       "A luxurious silk blouse. Versatile enough for the office or a night out.",
     rating: 4.7,
     reviewCount: 221,
+    sizes: ["XS", "S", "M", "L"],
+    colors: ["Ivory", "Blush", "Black"],
   },
 ];
 

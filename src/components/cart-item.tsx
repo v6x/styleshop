@@ -2,9 +2,36 @@
 
 import { CartItem as CartItemType } from "@/lib/types";
 import { useCart } from "@/lib/cart-store";
+import { track } from "@/lib/analytics/track";
 
 export function CartItem({ item }: { item: CartItemType }) {
   const { updateQuantity, removeItem } = useCart();
+
+  const handleQuantityChange = (newQuantity: number) => {
+    const oldQuantity = item.quantity;
+    updateQuantity(item.product.id, newQuantity);
+
+    // CLEAN: cart_quantity_changed
+    track("cart_quantity_changed", {
+      product_id: item.product.id,
+      product_name: item.product.name,
+      old_quantity: oldQuantity,
+      new_quantity: newQuantity,
+      price: item.product.price,
+    });
+  };
+
+  const handleRemove = () => {
+    removeItem(item.product.id);
+
+    // CLEAN: cart_item_removed
+    track("cart_item_removed", {
+      product_id: item.product.id,
+      product_name: item.product.name,
+      price: item.product.price,
+      quantity: item.quantity,
+    });
+  };
 
   return (
     <div className="flex items-center gap-4 py-4 border-b border-gray-100">
@@ -24,21 +51,21 @@ export function CartItem({ item }: { item: CartItemType }) {
       </div>
       <div className="flex items-center gap-2">
         <button
-          onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
+          onClick={() => handleQuantityChange(item.quantity - 1)}
           className="w-8 h-8 rounded border border-gray-300 text-gray-600 hover:bg-gray-50"
         >
           -
         </button>
         <span className="w-8 text-center text-sm">{item.quantity}</span>
         <button
-          onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+          onClick={() => handleQuantityChange(item.quantity + 1)}
           className="w-8 h-8 rounded border border-gray-300 text-gray-600 hover:bg-gray-50"
         >
           +
         </button>
       </div>
       <button
-        onClick={() => removeItem(item.product.id)}
+        onClick={handleRemove}
         className="text-gray-400 hover:text-gray-600 text-sm"
       >
         Remove
