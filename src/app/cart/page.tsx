@@ -11,8 +11,9 @@ export default function CartPage() {
 
   // BROKEN: setInterval cleanup 없음 → 중복 발화 (3-5회)
   useEffect(() => {
+    let intervalId: NodeJS.Timeout | undefined;
     if (items.length > 0) {
-      setInterval(() => {
+      intervalId = setInterval(() => {
         track("cart_abandon", {
           item_count: items.length,
           cart_total: totalPrice,
@@ -20,6 +21,12 @@ export default function CartPage() {
         });
       }, 10000);
     }
+
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
   }, [items.length, totalPrice]);
 
   if (items.length === 0) {
