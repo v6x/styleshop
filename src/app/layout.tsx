@@ -8,7 +8,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "StyleShop",
-  description: "트렌디한 패션 쇼핑몰 StyleShop",
+  description: "Trendy fashion e-commerce store StyleShop",
 };
 
 export default function RootLayout({
@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko">
+    <html lang="en">
       <head>
         <Script
           src="https://cdn.amplitude.com/script/11ac0aba94f06500e63bb124d05f2346.js"

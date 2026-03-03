@@ -12,7 +12,7 @@ export function BuyNowButton({ product }: { product: Product }) {
   const handleClick = () => {
     addItem(product);
 
-    // BROKEN: price, product_name, source 속성이 누락됨
+    // BROKEN: price, product_name, source properties are missing
     track("click_buy_now", {
       product_id: product.id,
     });
@@ -25,7 +25,7 @@ export function BuyNowButton({ product }: { product: Product }) {
       onClick={handleClick}
       className="w-full border border-gray-900 text-gray-900 py-2 rounded-lg hover:bg-gray-50 transition-colors text-sm"
     >
-      바로 구매
+      Buy Now
     </button>
   );
 }

@@ -37,7 +37,7 @@ export default function ProductDetailPage({
         href="/products"
         className="text-sm text-gray-500 hover:text-gray-900 mb-6 inline-block"
       >
-        ← 상품 목록
+        ← Back to Products
       </Link>
 
       <div className="grid md:grid-cols-2 gap-8 mt-4">
@@ -58,17 +58,17 @@ export default function ProductDetailPage({
           <div className="flex items-center gap-2 mb-4">
             <span className="text-yellow-400">★</span>
             <span className="text-sm text-gray-600">
-              {product.rating} ({product.reviewCount}개 리뷰)
+              {product.rating} ({product.reviewCount} reviews)
             </span>
           </div>
 
           <div className="flex items-center gap-3 mb-6">
             <span className="text-2xl font-bold">
-              {product.price.toLocaleString()}원
+              {`$${product.price.toFixed(2)}`}
             </span>
             {product.originalPrice && (
               <span className="text-lg text-gray-400 line-through">
-                {product.originalPrice.toLocaleString()}원
+                {`$${product.originalPrice.toFixed(2)}`}
               </span>
             )}
           </div>

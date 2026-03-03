@@ -30,10 +30,10 @@ export default function CheckoutPage() {
       })),
     });
 
-    // LEGACY/DUPLICATE: evt_purchase (축약 속성, purchase_complete와 중복)
+    // LEGACY/DUPLICATE: evt_purchase (abbreviated props, duplicates purchase_complete)
     trackLegacyPurchase(orderId, totalPrice, totalItems);
 
-    // LEGACY/DUPLICATE: coupon_applied (apply_coupon과 중복)
+    // LEGACY/DUPLICATE: coupon_applied (duplicates apply_coupon)
     track("coupon_applied", {
       coupon_code: "N/A",
       page: "checkout",
@@ -47,20 +47,20 @@ export default function CheckoutPage() {
   if (items.length === 0) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-16 text-center">
-        <h1 className="text-2xl font-bold mb-4">결제</h1>
-        <p className="text-gray-500">장바구니가 비어있습니다.</p>
+        <h1 className="text-2xl font-bold mb-4">Checkout</h1>
+        <p className="text-gray-500">Your cart is empty.</p>
       </div>
     );
   }
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">결제</h1>
+      <h1 className="text-2xl font-bold mb-6">Checkout</h1>
 
       <div className="space-y-6">
         {/* Order Summary */}
         <div className="bg-white rounded-lg p-6 shadow-sm">
-          <h2 className="font-bold mb-4">주문 내역</h2>
+          <h2 className="font-bold mb-4">Order Summary</h2>
           {items.map((item) => (
             <div
               key={item.product.id}
@@ -70,45 +70,45 @@ export default function CheckoutPage() {
                 {item.product.name} × {item.quantity}
               </span>
               <span>
-                {(item.product.price * item.quantity).toLocaleString()}원
+                {`$${(item.product.price * item.quantity).toFixed(2)}`}
               </span>
             </div>
           ))}
           <div className="border-t border-gray-200 mt-3 pt-3 flex justify-between font-bold">
-            <span>합계</span>
-            <span>{totalPrice.toLocaleString()}원</span>
+            <span>Total</span>
+            <span>{`$${totalPrice.toFixed(2)}`}</span>
           </div>
         </div>
 
-        {/* Coupon — LEGACY/DUPLICATE 이벤트 */}
+        {/* Coupon — LEGACY/DUPLICATE event */}
         <div className="bg-white rounded-lg p-6 shadow-sm">
-          <h2 className="font-bold mb-4">쿠폰</h2>
+          <h2 className="font-bold mb-4">Coupon</h2>
           <CouponInput />
         </div>
 
         {/* Shipping Info */}
         <div className="bg-white rounded-lg p-6 shadow-sm">
-          <h2 className="font-bold mb-4">배송 정보</h2>
+          <h2 className="font-bold mb-4">Shipping Information</h2>
           <div className="space-y-4">
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="이름"
+              placeholder="Full Name"
               className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900"
             />
             <input
               type="text"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              placeholder="배송 주소"
+              placeholder="Shipping Address"
               className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900"
             />
             <input
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="연락처"
+              placeholder="Phone Number"
               className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900"
             />
           </div>
@@ -119,7 +119,7 @@ export default function CheckoutPage() {
           onClick={handlePurchase}
           className="w-full bg-gray-900 text-white py-3 rounded-lg hover:bg-gray-800 transition-colors font-bold"
         >
-          {totalPrice.toLocaleString()}원 결제하기
+          {`Pay $${totalPrice.toFixed(2)}`}
         </button>
       </div>
     </div>

@@ -30,11 +30,11 @@ export function ProductCard({ product }: { product: Product }) {
         </Link>
         <div className="flex items-center gap-2 mb-3">
           <span className="text-lg font-bold">
-            {product.price.toLocaleString()}원
+            {`$${product.price.toFixed(2)}`}
           </span>
           {product.originalPrice && (
             <span className="text-sm text-gray-400 line-through">
-              {product.originalPrice.toLocaleString()}원
+              {`$${product.originalPrice.toFixed(2)}`}
             </span>
           )}
         </div>

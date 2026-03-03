@@ -7,7 +7,7 @@ export function track(
   amplitude.track(eventName, properties);
 }
 
-// LEGACY: 축약된 속성명 사용, purchase_complete와 중복
+// LEGACY: uses abbreviated property names, duplicates purchase_complete
 export function trackLegacyPurchase(
   orderId: string,
   amount: number,

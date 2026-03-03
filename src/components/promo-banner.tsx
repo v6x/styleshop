@@ -17,7 +17,7 @@ export function PromoBanner({
   link,
 }: PromoBannerProps) {
   const handleClick = () => {
-    // BROKEN: discount_percentage 속성이 누락됨
+    // BROKEN: discount_percentage property is missing
     track("promo_banner_click", {
       banner_title: title,
       link,

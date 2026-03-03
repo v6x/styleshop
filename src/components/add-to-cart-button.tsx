@@ -22,7 +22,7 @@ export function AddToCartButton({ product }: { product: Product }) {
       onClick={handleClick}
       className="w-full bg-gray-900 text-white py-2 rounded-lg hover:bg-gray-800 transition-colors text-sm"
     >
-      장바구니 담기
+      Add to Cart
     </button>
   );
 }

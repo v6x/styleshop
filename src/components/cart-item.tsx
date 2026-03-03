@@ -19,7 +19,7 @@ export function CartItem({ item }: { item: CartItemType }) {
           {item.product.name}
         </h3>
         <p className="text-sm font-bold mt-1">
-          {item.product.price.toLocaleString()}원
+          {`$${item.product.price.toFixed(2)}`}
         </p>
       </div>
       <div className="flex items-center gap-2">
@@ -41,7 +41,7 @@ export function CartItem({ item }: { item: CartItemType }) {
         onClick={() => removeItem(item.product.id)}
         className="text-gray-400 hover:text-gray-600 text-sm"
       >
-        삭제
+        Remove
       </button>
     </div>
   );

@@ -9,7 +9,7 @@ import { track } from "@/lib/analytics/track";
 export default function CartPage() {
   const { items, totalPrice } = useCart();
 
-  // BROKEN: setInterval cleanup 없음 → 중복 발화 (3-5회)
+  // BROKEN: no setInterval cleanup → duplicate fires (3-5x)
   useEffect(() => {
     if (items.length > 0) {
       setInterval(() => {
@@ -25,13 +25,13 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-16 text-center">
-        <h1 className="text-2xl font-bold mb-4">장바구니</h1>
-        <p className="text-gray-500 mb-8">장바구니가 비어있습니다.</p>
+        <h1 className="text-2xl font-bold mb-4">Shopping Cart</h1>
+        <p className="text-gray-500 mb-8">Your cart is empty.</p>
         <Link
           href="/products"
           className="inline-block bg-gray-900 text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors"
         >
-          쇼핑하기
+          Shop Now
         </Link>
       </div>
     );
@@ -39,7 +39,7 @@ export default function CartPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">장바구니</h1>
+      <h1 className="text-2xl font-bold mb-6">Shopping Cart</h1>
 
       <div className="bg-white rounded-lg p-6 shadow-sm">
         {items.map((item) => (
@@ -48,9 +48,9 @@ export default function CartPage() {
 
         <div className="mt-6 pt-4 border-t border-gray-200">
           <div className="flex justify-between items-center mb-4">
-            <span className="text-gray-600">총 금액</span>
+            <span className="text-gray-600">Total</span>
             <span className="text-xl font-bold">
-              {totalPrice.toLocaleString()}원
+              {`$${totalPrice.toFixed(2)}`}
             </span>
           </div>
 
@@ -58,7 +58,7 @@ export default function CartPage() {
             href="/checkout"
             className="block w-full bg-gray-900 text-white text-center py-3 rounded-lg hover:bg-gray-800 transition-colors"
           >
-            결제하기
+            Checkout
           </Link>
         </div>
       </div>

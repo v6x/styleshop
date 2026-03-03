@@ -14,21 +14,21 @@ export default function HomePage() {
           Style Your Life
         </h1>
         <p className="mt-4 text-lg text-gray-600 max-w-xl mx-auto">
-          트렌디한 패션 아이템을 만나보세요. 매주 새로운 스타일이 업데이트됩니다.
+          Discover trendy fashion items. New styles updated every week.
         </p>
         <Link
           href="/products"
           className="inline-block mt-8 bg-gray-900 text-white px-8 py-3 rounded-lg hover:bg-gray-800 transition-colors"
         >
-          쇼핑하기
+          Shop Now
         </Link>
       </section>
 
-      {/* Promo Banner — BROKEN 이벤트 (discount_percentage 누락) */}
+      {/* Promo Banner — BROKEN event (discount_percentage missing) */}
       <section className="mb-12">
         <PromoBanner
-          title="윈터 세일"
-          description="겨울 아이템 최대 할인"
+          title="Winter Sale"
+          description="Up to max discount on winter items"
           discount={30}
           link="/products"
         />
@@ -37,12 +37,12 @@ export default function HomePage() {
       {/* Featured Products */}
       <section className="pb-16">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold">추천 상품</h2>
+          <h2 className="text-2xl font-bold">Featured Products</h2>
           <Link
             href="/products"
             className="text-sm text-gray-600 hover:text-gray-900"
           >
-            전체 보기 →
+            View All →
           </Link>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
