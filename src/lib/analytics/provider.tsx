@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import * as amplitude from "@amplitude/analytics-browser";
+import { postMessagePlugin } from "./postmessage-plugin";
 
 const AMPLITUDE_API_KEY = process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY;
 
@@ -12,6 +13,7 @@ export function AmplitudeProvider({
 }) {
   useEffect(() => {
     if (AMPLITUDE_API_KEY) {
+      amplitude.add(postMessagePlugin());
       amplitude.init(AMPLITUDE_API_KEY, undefined, {
         defaultTracking: false,
       });
