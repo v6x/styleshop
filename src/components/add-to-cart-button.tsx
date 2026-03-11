@@ -14,6 +14,7 @@ export function AddToCartButton({ product }: { product: Product }) {
       product_name: product.name,
       price: product.price,
       category: product.category,
+      is_sale_item: product.isSale,
       source: "product_page",
     });
   };
