@@ -13,10 +13,10 @@ export function AmplitudeProvider({
 }) {
   useEffect(() => {
     if (AMPLITUDE_API_KEY) {
+      amplitude.add(postMessagePlugin());
       amplitude.init(AMPLITUDE_API_KEY, undefined, {
         defaultTracking: false,
       });
-      amplitude.add(postMessagePlugin());
     }
   }, []);
 
