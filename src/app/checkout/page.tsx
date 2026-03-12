@@ -82,6 +82,7 @@ export default function CheckoutPage() {
       order_id: orderId,
       total_amount: totalPrice,
       item_count: totalItems,
+      coupon_code: "N/A",
       items: items.map((item) => ({
         product_id: item.product.id,
         product_name: item.product.name,
