@@ -13,6 +13,7 @@ export function AddToCartButton({ product }: { product: Product }) {
       product_id: product.id,
       product_name: product.name,
       price: product.price,
+      is_sale: product.is_sale,
       category: product.category,
       source: "product_page",
     });
