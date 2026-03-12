@@ -14,6 +14,10 @@ export function PaymentStep({ onNext, onBack }: PaymentStepProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    amplitude.track('coupon_applied', {
+      coupon_name: 'unknown',
+      coupon_id: 'unknown',
+    });
     onNext({ cardNumber, expiry, cvv });
   };
 
