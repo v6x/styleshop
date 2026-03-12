@@ -8,7 +8,6 @@ import { track } from "@/lib/analytics/track";
 
 export default function CartPage() {
   const { items, totalPrice } = useCart();
-
   // BROKEN: no setInterval cleanup → duplicate fires (3-5x)
   useEffect(() => {
     if (items.length > 0) {
@@ -50,20 +49,12 @@ export default function CartPage() {
           <div className="flex justify-between items-center mb-4">
             <span className="text-gray-600">Total</span>
             <span className="text-xl font-bold">
-              {`$${totalPrice.toFixed(2)}`}
+              {`${totalPrice.toFixed(2)}`}
             </span>
           </div>
 
           <Link
             href="/checkout"
-            onClick={() => {
-              // LEGACY: duplicates checkout_started + abbreviated properties
-              track("evt_checkout_start", {
-                cnt: items.length,
-                amt: totalPrice,
-                ts: Date.now(),
-              });
-            }}
             className="block w-full bg-gray-900 text-white text-center py-3 rounded-lg hover:bg-gray-800 transition-colors"
           >
             Checkout
