@@ -20,7 +20,7 @@ export function QuickViewModal({ product, onClose }: QuickViewModalProps) {
     track("product_viewed", {
       product_id: product.id,
       product_name: product.name,
-      price: `$${product.price.toFixed(2)}`,
+      price: `${product.price.toFixed(2)}`,
       category: product.category,
       source: "quick_view",
     });
@@ -34,6 +34,7 @@ export function QuickViewModal({ product, onClose }: QuickViewModalProps) {
       product_id: product.id,
       product_name: product.name,
       price: product.price,
+      is_sale: !!product.originalPrice,
     });
 
     show("Added to cart!", "success");
