@@ -82,6 +82,7 @@ export default function CheckoutPage() {
       order_id: orderId,
       total_amount: totalPrice,
       item_count: totalItems,
+      currency: "USD",
       items: items.map((item) => ({
         product_id: item.product.id,
         product_name: item.product.name,
@@ -132,13 +133,13 @@ export default function CheckoutPage() {
                 {item.product.name} × {item.quantity}
               </span>
               <span>
-                {`$${(item.product.price * item.quantity).toFixed(2)}`}
+                {`${(item.product.price * item.quantity).toFixed(2)}`}
               </span>
             </div>
           ))}
           <div className="border-t border-gray-200 mt-3 pt-3 flex justify-between font-bold">
             <span>Total</span>
-            <span>{`$${totalPrice.toFixed(2)}`}</span>
+            <span>{`${totalPrice.toFixed(2)}`}</span>
           </div>
         </div>
 
