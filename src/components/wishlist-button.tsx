@@ -29,6 +29,14 @@ export function WishlistButton({ product, size = "md" }: WishlistButtonProps) {
       action,
     });
 
+    if (action === "added") {
+      track("wishlist_added", {
+        product_id: product.id,
+        product_name: product.name,
+        price: product.price,
+      });
+    }
+
     show(
       isWished ? "Removed from wishlist" : "Added to wishlist",
       isWished ? "info" : "success",
