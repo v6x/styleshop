@@ -18,6 +18,12 @@ export default function HomePage() {
     });
   };
 
+  const handleViewAllClick = () => {
+    track("view_all_clicked", {
+      source_section: "featured_products",
+    });
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Hero */}
