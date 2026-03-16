@@ -47,7 +47,10 @@ function cleanup() {
   });
 }
 
+const VALID_TARGETS = new Set(["product-card", "add-to-cart"]);
+
 function applyHighlight(target: string) {
+  if (!VALID_TARGETS.has(target)) return;
   cleanup();
 
   // Add dim overlay
