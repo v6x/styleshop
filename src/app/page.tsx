@@ -16,6 +16,7 @@ export default function HomePage() {
       dest: "/products",
       ts: Date.now(),
     });
+    track("view_all_clicked", { section: "promo_banner" });
   };
 
   return (
@@ -31,6 +32,7 @@ export default function HomePage() {
         <Link
           href="/products"
           className="inline-block mt-8 bg-gray-900 text-white px-8 py-3 rounded-lg hover:bg-gray-800 transition-colors"
+          onClick={() => track("view_all_clicked", { section: "hero" })}
         >
           Shop Now
         </Link>
