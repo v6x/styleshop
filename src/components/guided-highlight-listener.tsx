@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 const HIGHLIGHT_CLASS = "guided-highlight";
 const OVERLAY_ID = "guided-overlay";
@@ -67,11 +68,13 @@ function applyHighlight(target: string) {
  *
  * Protocol:
  *   Parent → StyleShop: { type: "guided_highlight", target: "product-card" | "add-to-cart" | null }
- *   StyleShop → Parent: { type: "guided_highlight_ready" }  (on mount / page navigation)
+ *   StyleShop → Parent: { type: "guided_highlight_ready" }  (on page navigation)
  */
 export function GuidedHighlightListener() {
+  const pathname = usePathname();
+
+  // Setup message listener (once)
   useEffect(() => {
-    // Only activate inside iframe
     if (typeof window === "undefined" || window.parent === window) return;
 
     injectStyles();
@@ -89,15 +92,22 @@ export function GuidedHighlightListener() {
     }
 
     window.addEventListener("message", handleMessage);
-
-    // Signal parent that we're ready (handles iframe page navigation)
-    window.parent.postMessage({ type: "guided_highlight_ready" }, "*");
-
     return () => {
       cleanup();
       window.removeEventListener("message", handleMessage);
     };
   }, []);
+
+  // Signal parent on every page navigation (pathname change)
+  useEffect(() => {
+    if (typeof window === "undefined" || window.parent === window) return;
+
+    // Small delay to ensure new page DOM is rendered
+    const timer = setTimeout(() => {
+      window.parent.postMessage({ type: "guided_highlight_ready" }, "*");
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [pathname]);
 
   return null;
 }
