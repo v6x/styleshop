@@ -8,6 +8,10 @@ export function AddToCartButton({ product }: { product: Product }) {
 
   const handleClick = () => {
     addItem(product);
+    amplitude.track('add_to_cart', {
+      product_id: product.id,
+      product_name: product.name,
+    });
   };
 
   return (
