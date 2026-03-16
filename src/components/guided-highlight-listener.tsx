@@ -67,6 +67,7 @@ function applyHighlight(target: string) {
  *
  * Protocol:
  *   Parent → StyleShop: { type: "guided_highlight", target: "product-card" | "add-to-cart" | null }
+ *   StyleShop → Parent: { type: "guided_highlight_ready" }  (on mount / page navigation)
  */
 export function GuidedHighlightListener() {
   useEffect(() => {
@@ -88,6 +89,10 @@ export function GuidedHighlightListener() {
     }
 
     window.addEventListener("message", handleMessage);
+
+    // Signal parent that we're ready (handles iframe page navigation)
+    window.parent.postMessage({ type: "guided_highlight_ready" }, "*");
+
     return () => {
       cleanup();
       window.removeEventListener("message", handleMessage);
