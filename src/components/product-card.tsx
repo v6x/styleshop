@@ -12,7 +12,7 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <>
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden group">
+      <div data-guided="product-card" className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden group">
         <Link href={`/products/${product.id}`}>
           <div className="aspect-[4/5] bg-gray-100 relative overflow-hidden">
             <img

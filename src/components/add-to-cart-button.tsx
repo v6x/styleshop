@@ -20,6 +20,7 @@ export function AddToCartButton({ product }: { product: Product }) {
 
   return (
     <button
+      data-guided="add-to-cart"
       onClick={handleClick}
       className="w-full bg-gray-900 text-white py-2 rounded-lg hover:bg-gray-800 transition-colors text-sm"
     >
