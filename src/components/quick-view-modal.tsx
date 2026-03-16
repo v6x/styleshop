@@ -28,14 +28,6 @@ export function QuickViewModal({ product, onClose }: QuickViewModalProps) {
 
   const handleAddToCart = () => {
     addItem(product);
-
-    // BROKEN: cross-file duplicate of add_to_cart (#3) + category, source missing
-    track("add_to_cart", {
-      product_id: product.id,
-      product_name: product.name,
-      price: product.price,
-    });
-
     show("Added to cart!", "success");
     onClose();
   };
