@@ -7,6 +7,7 @@ import { ToastProvider } from "@/components/toast-provider";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { PageTracker } from "@/components/page-tracker";
+import { GuidedHighlightListener } from "@/components/guided-highlight-listener";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -41,6 +42,7 @@ export default function RootLayout({
               <ToastProvider>
                 <Header />
                 <PageTracker />
+                <GuidedHighlightListener />
                 <main>{children}</main>
                 <Footer />
               </ToastProvider>
