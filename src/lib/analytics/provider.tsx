@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import * as amplitude from "@amplitude/analytics-browser";
 import { postMessagePlugin } from "./postmessage-plugin";
 
@@ -11,12 +11,7 @@ export function AmplitudeProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const initialized = useRef(false);
-
   useEffect(() => {
-    if (initialized.current) return;
-    initialized.current = true;
-
     if (AMPLITUDE_API_KEY) {
       amplitude.add(postMessagePlugin());
       amplitude.init(AMPLITUDE_API_KEY, undefined, {
