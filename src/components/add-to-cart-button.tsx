@@ -7,6 +7,9 @@ export function AddToCartButton({ product }: { product: Product }) {
   const { addItem } = useCart();
 
   const handleClick = () => {
+    if (window.parent !== window) {
+      window.parent.postMessage({ type: "add_to_cart_clicked" }, "*");
+    }
     addItem(product);
   };
 
