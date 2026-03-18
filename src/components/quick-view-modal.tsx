@@ -27,6 +27,9 @@ export function QuickViewModal({ product, onClose }: QuickViewModalProps) {
   }, [product]);
 
   const handleAddToCart = () => {
+    if (window.parent !== window) {
+      window.parent.postMessage({ type: "no_event", action: "click", component: "Add to Cart button" }, "*");
+    }
     addItem(product);
     show("Added to cart!", "success");
     onClose();
