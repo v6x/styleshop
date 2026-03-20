@@ -14,7 +14,8 @@ export function AddToCartButton({ product }: { product: Product }) {
     addItem(product);
     amplitude.track('add_to_cart', {
       product_id: product.id,
-      product_name: product.name
+      product_name: product.name,
+      product_price: product.price
     });
   };
 
