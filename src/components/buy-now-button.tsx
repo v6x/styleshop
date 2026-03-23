@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { Product } from "@/lib/types";
 import { useCart } from "@/lib/cart-store";
-import { track } from "@/lib/analytics/track";
 
 export function BuyNowButton({ product }: { product: Product }) {
   const router = useRouter();
@@ -11,12 +10,6 @@ export function BuyNowButton({ product }: { product: Product }) {
 
   const handleClick = () => {
     addItem(product);
-
-    // BROKEN: price, product_name, source properties are missing
-    track("click_buy_now", {
-      product_id: product.id,
-    });
-
     router.push("/checkout");
   };
 
