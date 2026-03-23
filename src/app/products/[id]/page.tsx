@@ -4,7 +4,6 @@ import { use, useEffect } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getProduct } from "@/lib/products";
-import { track } from "@/lib/analytics/track";
 import { AddToCartButton } from "@/components/add-to-cart-button";
 import { BuyNowButton } from "@/components/buy-now-button";
 import { VariantSelector } from "@/components/variant-selector";
@@ -24,12 +23,6 @@ export default function ProductDetailPage({
 
   useEffect(() => {
     if (product) {
-      track("product_viewed", {
-        product_id: product.id,
-        product_name: product.name,
-        price: product.price,
-        category: product.category,
-      });
       addToRecentlyViewed(product);
     }
   }, [product, addToRecentlyViewed]);
