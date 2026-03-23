@@ -6,7 +6,7 @@ import { WishlistProvider } from "@/lib/wishlist-store";
 import { ToastProvider } from "@/components/toast-provider";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-
+import { PageTracker } from "@/components/page-tracker";
 import { GuidedHighlightListener } from "@/components/guided-highlight-listener";
 import "./globals.css";
 
@@ -41,7 +41,7 @@ export default function RootLayout({
             <WishlistProvider>
               <ToastProvider>
                 <Header />
-
+                <PageTracker />
                 <GuidedHighlightListener />
                 <main>{children}</main>
                 <Footer />
