@@ -53,12 +53,6 @@ export default function HomePage() {
           <Link
             href="/products"
             className="text-sm text-gray-600 hover:text-gray-900"
-            onClick={() =>
-              amplitude.track("view_all_clicked", {
-                section: "featured_products",
-                destination: "/products",
-              })
-            }
           >
             View All →
           </Link>
