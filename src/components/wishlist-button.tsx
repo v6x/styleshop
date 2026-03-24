@@ -2,7 +2,6 @@
 
 import { Product } from "@/lib/types";
 import { useWishlist } from "@/lib/wishlist-store";
-import { track } from "@/lib/analytics/track";
 import { useToast } from "@/components/toast-provider";
 
 interface WishlistButtonProps {
@@ -19,15 +18,6 @@ export function WishlistButton({ product, size = "md" }: WishlistButtonProps) {
     e.preventDefault();
     e.stopPropagation();
     toggle(product);
-
-    const action = isWished ? "removed" : "added";
-
-    // CLEAN: wishlist_toggled
-    track("wishlist_toggled", {
-      product_id: product.id,
-      product_name: product.name,
-      action,
-    });
 
     show(
       isWished ? "Removed from wishlist" : "Added to wishlist",
