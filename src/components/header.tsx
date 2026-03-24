@@ -36,6 +36,11 @@ export function Header() {
             <Link
               href="/cart"
               className="relative text-gray-600 hover:text-gray-900"
+              onClick={() => {
+                amplitude.track('cart_clicked', {
+                  cart_item_count: totalItems,
+                });
+              }}
             >
               Cart
               {totalItems > 0 && (
