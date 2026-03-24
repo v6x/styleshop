@@ -29,6 +29,7 @@ export default function ProductDetailPage({
         product_name: product.name,
         price: product.price,
         category: product.category,
+        is_sale: !!product.originalPrice,
       });
       addToRecentlyViewed(product);
     }
