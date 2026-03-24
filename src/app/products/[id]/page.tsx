@@ -29,7 +29,6 @@ export default function ProductDetailPage({
         product_name: product.name,
         price: product.price,
         category: product.category,
-        is_sale: !!product.originalPrice,
       });
       addToRecentlyViewed(product);
     }
@@ -75,11 +74,11 @@ export default function ProductDetailPage({
 
           <div className="flex items-center gap-3 mb-6">
             <span className="text-2xl font-bold">
-              {`${product.price.toFixed(2)}`}
+              {`$${product.price.toFixed(2)}`}
             </span>
             {product.originalPrice && (
               <span className="text-lg text-gray-400 line-through">
-                {`${product.originalPrice.toFixed(2)}`}
+                {`$${product.originalPrice.toFixed(2)}`}
               </span>
             )}
           </div>
