@@ -31,6 +31,9 @@ export default function HomePage() {
         <Link
           href="/products"
           className="inline-block mt-8 bg-gray-900 text-white px-8 py-3 rounded-lg hover:bg-gray-800 transition-colors"
+          onClick={() =>
+            amplitude.track("shop_now_clicked", { destination: "/products" })
+          }
         >
           Shop Now
         </Link>
