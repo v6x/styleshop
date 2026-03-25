@@ -1,26 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
 import Link from "next/link";
 import { useCart } from "@/lib/cart-store";
 import { CartItem } from "@/components/cart-item";
-import { track } from "@/lib/analytics/track";
 
 export default function CartPage() {
   const { items, totalPrice } = useCart();
-
-  // BROKEN: no setInterval cleanup → duplicate fires (3-5x)
-  useEffect(() => {
-    if (items.length > 0) {
-      setInterval(() => {
-        track("cart_abandon", {
-          item_count: items.length,
-          cart_total: totalPrice,
-          timestamp: new Date().toISOString(),
-        });
-      }, 10000);
-    }
-  }, [items.length, totalPrice]);
 
   if (items.length === 0) {
     return (
@@ -56,14 +41,6 @@ export default function CartPage() {
 
           <Link
             href="/checkout"
-            onClick={() => {
-              // LEGACY: duplicates checkout_started + abbreviated properties
-              track("evt_checkout_start", {
-                cnt: items.length,
-                amt: totalPrice,
-                ts: Date.now(),
-              });
-            }}
             className="block w-full bg-gray-900 text-white text-center py-3 rounded-lg hover:bg-gray-800 transition-colors"
           >
             Checkout

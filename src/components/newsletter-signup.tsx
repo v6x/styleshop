@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { track } from "@/lib/analytics/track";
 
 export function NewsletterSignup() {
   const [email, setEmail] = useState("");
@@ -9,25 +8,11 @@ export function NewsletterSignup() {
 
   const handleChange = (value: string) => {
     setEmail(value);
-
-    // BROKEN: fires on every keystroke instead of on submit
-    track("newsletter_signup", {
-      email: value,
-      source: "footer",
-      timestamp: new Date().toISOString(),
-    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
-
-    // LEGACY: abbreviated event name, but fires correctly on submit
-    track("newsletter_sub", {
-      email,
-      src: "footer",
-      ts: new Date().toISOString(),
-    });
 
     setSubmitted(true);
   };

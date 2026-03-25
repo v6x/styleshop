@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { track } from "@/lib/analytics/track";
 
 export function CouponInput() {
   const [code, setCode] = useState("");
@@ -9,12 +8,6 @@ export function CouponInput() {
 
   const handleApply = () => {
     if (!code.trim()) return;
-
-    // LEGACY/DUPLICATE: apply_coupon and coupon_applied fire from different locations
-    track("apply_coupon", {
-      coupon_code: code,
-      page: "coupon_input",
-    });
 
     setApplied(true);
   };

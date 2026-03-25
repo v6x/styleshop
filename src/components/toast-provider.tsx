@@ -8,7 +8,6 @@ import {
   type ReactNode,
 } from "react";
 import { ToastMessage } from "@/lib/types";
-import { track } from "@/lib/analytics/track";
 
 interface ToastContextType {
   show: (message: string, type?: ToastMessage["type"]) => void;
@@ -24,13 +23,6 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       const id = `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
       const toast: ToastMessage = { id, message, type };
       setToasts((prev) => [...prev, toast]);
-
-      // CLEAN: toast_displayed
-      track("toast_displayed", {
-        message,
-        type,
-        toast_id: id,
-      });
 
       setTimeout(() => {
         setToasts((prev) => prev.filter((t) => t.id !== id));

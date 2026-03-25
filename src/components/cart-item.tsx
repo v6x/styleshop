@@ -2,35 +2,16 @@
 
 import { CartItem as CartItemType } from "@/lib/types";
 import { useCart } from "@/lib/cart-store";
-import { track } from "@/lib/analytics/track";
 
 export function CartItem({ item }: { item: CartItemType }) {
   const { updateQuantity, removeItem } = useCart();
 
   const handleQuantityChange = (newQuantity: number) => {
-    const oldQuantity = item.quantity;
     updateQuantity(item.product.id, newQuantity);
-
-    // CLEAN: cart_quantity_changed
-    track("cart_quantity_changed", {
-      product_id: item.product.id,
-      product_name: item.product.name,
-      old_quantity: oldQuantity,
-      new_quantity: newQuantity,
-      price: item.product.price,
-    });
   };
 
   const handleRemove = () => {
     removeItem(item.product.id);
-
-    // CLEAN: cart_item_removed
-    track("cart_item_removed", {
-      product_id: item.product.id,
-      product_name: item.product.name,
-      price: item.product.price,
-      quantity: item.quantity,
-    });
   };
 
   return (

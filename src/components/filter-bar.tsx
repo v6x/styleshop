@@ -1,7 +1,5 @@
 "use client";
 
-import { track } from "@/lib/analytics/track";
-
 const CATEGORIES = ["All", "Outerwear", "Tops", "Bottoms", "Dresses", "Accessories", "Shoes"];
 const SORT_OPTIONS = [
   { value: "default", label: "Default" },
@@ -31,39 +29,14 @@ export function FilterBar({
 }: FilterBarProps) {
   const handleSearch = (value: string) => {
     onQueryChange(value);
-    if (value.trim()) {
-      track("search_executed", {
-        query: value,
-        results_count: resultsCount,
-      });
-
-      // LEGACY: duplicates search_executed with abbreviated properties
-      track("search", {
-        q: value,
-        num_results: resultsCount,
-      });
-    }
   };
 
   const handleCategoryChange = (cat: string) => {
     onCategoryChange(cat);
-
-    // CLEAN: filter_applied
-    track("filter_applied", {
-      filter_type: "category",
-      filter_value: cat,
-      results_count: resultsCount,
-    });
   };
 
   const handleSortChange = (value: string) => {
     onSortChange(value);
-
-    // CLEAN: sort_changed
-    track("sort_changed", {
-      sort_by: value,
-      results_count: resultsCount,
-    });
   };
 
   return (

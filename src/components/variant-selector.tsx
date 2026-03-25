@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Product } from "@/lib/types";
-import { track } from "@/lib/analytics/track";
 
 interface VariantSelectorProps {
   product: Product;
@@ -14,24 +13,10 @@ export function VariantSelector({ product }: VariantSelectorProps) {
 
   const handleSizeSelect = (size: string) => {
     setSelectedSize(size);
-
-    // BROKEN: product_id is number (type mismatch), product_name missing
-    track("variant_selected", {
-      product_id: Number(product.id),
-      variant_type: "size",
-      variant_value: size,
-    });
   };
 
   const handleColorSelect = (color: string) => {
     setSelectedColor(color);
-
-    // BROKEN: product_id is number (type mismatch), product_name missing
-    track("variant_selected", {
-      product_id: Number(product.id),
-      variant_type: "color",
-      variant_value: color,
-    });
   };
 
   return (
