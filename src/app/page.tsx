@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import * as amplitude from "@amplitude/analytics-browser";
 import { products } from "@/lib/products";
 import { ProductCard } from "@/components/product-card";
 import { PromoBanner } from "@/components/promo-banner";
@@ -15,6 +16,14 @@ export default function HomePage() {
       banner: "winter_sale",
       dest: "/products",
       ts: Date.now(),
+    });
+  };
+
+  const handleViewAllClick = () => {
+    amplitude.track("view_all_clicked", {
+      section: "featured_products",
+      destination: "/products",
+      timestamp: Date.now(),
     });
   };
 
@@ -53,6 +62,7 @@ export default function HomePage() {
           <Link
             href="/products"
             className="text-sm text-gray-600 hover:text-gray-900"
+            onClick={handleViewAllClick}
           >
             View All →
           </Link>
