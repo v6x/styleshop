@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { track } from "@/lib/analytics/track";
 
 interface PromoBannerProps {
   title: string;
@@ -16,18 +15,9 @@ export function PromoBanner({
   discount,
   link,
 }: PromoBannerProps) {
-  const handleClick = () => {
-    // BROKEN: discount_percentage property is missing
-    track("promo_banner_click", {
-      banner_title: title,
-      link,
-    });
-  };
-
   return (
     <Link
       href={link}
-      onClick={handleClick}
       className="block bg-gradient-to-r from-gray-900 to-gray-700 text-white rounded-xl p-6 sm:p-8 hover:shadow-lg transition-shadow"
     >
       <div className="flex items-center justify-between">

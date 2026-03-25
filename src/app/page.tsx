@@ -4,19 +4,9 @@ import Link from "next/link";
 import { products } from "@/lib/products";
 import { ProductCard } from "@/components/product-card";
 import { PromoBanner } from "@/components/promo-banner";
-import { track } from "@/lib/analytics/track";
 
 export default function HomePage() {
   const featured = products.slice(0, 4);
-
-  const handlePromoClick = () => {
-    // LEGACY: duplicates promo_banner_click with different properties
-    track("promo_click", {
-      banner: "winter_sale",
-      dest: "/products",
-      ts: Date.now(),
-    });
-  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,8 +26,8 @@ export default function HomePage() {
         </Link>
       </section>
 
-      {/* Promo Banner — BROKEN event (discount_percentage missing) + LEGACY duplicate */}
-      <section className="mb-12" onClick={handlePromoClick}>
+      {/* Promo Banner */}
+      <section className="mb-12">
         <PromoBanner
           title="Winter Sale"
           description="Up to max discount on winter items"

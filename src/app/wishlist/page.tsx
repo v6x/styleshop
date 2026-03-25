@@ -1,24 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
 import Link from "next/link";
 import { useWishlist } from "@/lib/wishlist-store";
 import { ProductCard } from "@/components/product-card";
-import { track } from "@/lib/analytics/track";
 
 export default function WishlistPage() {
   const { items } = useWishlist();
-
-  useEffect(() => {
-    // LEGACY: abbreviated properties (pid, pname, ts)
-    items.forEach((product) => {
-      track("wishlist_add", {
-        pid: product.id,
-        pname: product.name,
-        ts: new Date().toISOString(),
-      });
-    });
-  }, [items]);
 
   if (items.length === 0) {
     return (
