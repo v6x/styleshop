@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import * as amplitude from '@amplitude/analytics-browser';
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/lib/cart-store";
 import { CouponInput } from "@/components/coupon-input";
@@ -18,6 +19,21 @@ export default function CheckoutPage() {
     address: "",
     phone: "",
   });
+
+  useEffect(() => {
+    if (items.length > 0) {
+      const firstItem = items[0];
+      const checkoutId = `CHK-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+      amplitude.track('checkout_initiated', {
+        product_id: firstItem.product.id,
+        product_name: firstItem.product.name,
+        product_price: firstItem.product.price,
+        currency: "USD",
+        checkout_id: checkoutId,
+        timestamp_ms: Date.now(),
+      });
+    }
+  }, []);
 
   const handleShippingComplete = (data: {
     name: string;
@@ -67,13 +83,13 @@ export default function CheckoutPage() {
                 {item.product.name} × {item.quantity}
               </span>
               <span>
-                {`$${(item.product.price * item.quantity).toFixed(2)}`}
+                {`${(item.product.price * item.quantity).toFixed(2)}`}
               </span>
             </div>
           ))}
           <div className="border-t border-gray-200 mt-3 pt-3 flex justify-between font-bold">
             <span>Total</span>
-            <span>{`$${totalPrice.toFixed(2)}`}</span>
+            <span>{`${totalPrice.toFixed(2)}`}</span>
           </div>
         </div>
 
