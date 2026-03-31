@@ -1,5 +1,6 @@
 "use client";
 
+import * as amplitude from '@amplitude/analytics-browser';
 import { use, useEffect } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -24,6 +25,14 @@ export default function ProductDetailPage({
   useEffect(() => {
     if (product) {
       addToRecentlyViewed(product);
+      amplitude.track("product_page_viewed", {
+        product_id: product.id,
+        product_name: product.name,
+        category: product.category,
+        price: product.price,
+        currency: "USD",
+        viewed_at_ts: Date.now(),
+      });
     }
   }, [product, addToRecentlyViewed]);
 
@@ -67,11 +76,11 @@ export default function ProductDetailPage({
 
           <div className="flex items-center gap-3 mb-6">
             <span className="text-2xl font-bold">
-              {`$${product.price.toFixed(2)}`}
+              {`${product.price.toFixed(2)}`}
             </span>
             {product.originalPrice && (
               <span className="text-lg text-gray-400 line-through">
-                {`$${product.originalPrice.toFixed(2)}`}
+                {`${product.originalPrice.toFixed(2)}`}
               </span>
             )}
           </div>

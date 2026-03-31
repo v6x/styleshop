@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import * as amplitude from "@amplitude/analytics-browser";
 import { products } from "@/lib/products";
 import { ProductCard } from "@/components/product-card";
 import { FilterBar } from "@/components/filter-bar";
@@ -44,6 +45,25 @@ export default function ProductsPage() {
 
     return result;
   }, [query, category, sort]);
+
+  useEffect(() => {
+    const listType = query ? "search" : category !== "All" ? "category" : "collection";
+    const listId = query ? query : category !== "All" ? category : "all_products";
+    const listName = query ? `Search: ${query}` : category !== "All" ? category : "All Products";
+    const activeFilters = [];
+    if (category !== "All") activeFilters.push(`category: ${category}`);
+    if (query) activeFilters.push(`query: ${query}`);
+
+    amplitude.track("product_list_viewed", {
+      list_type: listType,
+      list_id: listId,
+      list_name: listName,
+      total_results: filtered.length,
+      page_number: 1,
+      sort_order: sort,
+      filters_applied: activeFilters.length > 0 ? activeFilters.join(", ") : "none",
+    });
+  }, [filtered, query, category, sort]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
