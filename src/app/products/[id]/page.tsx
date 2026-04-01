@@ -1,5 +1,6 @@
 "use client";
 
+import * as amplitude from '@amplitude/analytics-browser';
 import { use, useEffect } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -24,6 +25,13 @@ export default function ProductDetailPage({
   useEffect(() => {
     if (product) {
       addToRecentlyViewed(product);
+      amplitude.track('product_page_viewed', {
+        product_id: product.id,
+        product_name: product.name,
+        category: product.category,
+        price: product.price,
+        currency: "USD",
+      });
     }
   }, [product, addToRecentlyViewed]);
 
@@ -46,7 +54,15 @@ export default function ProductDetailPage({
           <img
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover cursor-pointer"
+            onClick={() => {
+              amplitude.track('product_image_interacted', {
+                product_id: product.id,
+                interaction_type: 'click',
+                image_index: 0,
+                image_url: product.image,
+              });
+            }}
           />
         </div>
 
@@ -67,11 +83,11 @@ export default function ProductDetailPage({
 
           <div className="flex items-center gap-3 mb-6">
             <span className="text-2xl font-bold">
-              {`$${product.price.toFixed(2)}`}
+              {`${product.price.toFixed(2)}`}
             </span>
             {product.originalPrice && (
               <span className="text-lg text-gray-400 line-through">
-                {`$${product.originalPrice.toFixed(2)}`}
+                {`${product.originalPrice.toFixed(2)}`}
               </span>
             )}
           </div>
