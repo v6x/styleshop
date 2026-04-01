@@ -1,6 +1,7 @@
 "use client";
 
-import { use, useEffect } from "react";
+import * as amplitude from "@amplitude/analytics-browser";
+import { use, useEffect, useState, useRef } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getProduct } from "@/lib/products";
@@ -20,12 +21,72 @@ export default function ProductDetailPage({
   const product = getProduct(id);
   const { items: recentlyViewed, add: addToRecentlyViewed } =
     useRecentlyViewed();
+  const [pageLoadTime] = useState(Date.now());
+  const reviewsRef = useRef<HTMLDivElement>(null);
+
+  const handleImageInteraction = () => {
+    if (!product) return;
+    const timeOnPageSec = (Date.now() - pageLoadTime) / 1000;
+    amplitude.track("product_image_interacted", {
+      product_id: product.id,
+      interaction_type: "click",
+      image_index: 0,
+      total_images: 1,
+      time_on_page_sec: timeOnPageSec,
+      session_id: amplitude.getSessionId(),
+    });
+  };
 
   useEffect(() => {
     if (product) {
+      const isReturnVisit = recentlyViewed.some((item) => item.id === product.id);
+
+      amplitude.track("product_page_viewed", {
+        product_id: product.id,
+        product_name: product.name,
+        category: product.category,
+        price: product.price,
+        currency: "USD",
+        brand: product.brand,
+        is_return_visit: isReturnVisit,
+        referrer_source: document.referrer,
+        in_stock: product.inStock,
+        variant_count: product.variants?.length ?? 0,
+        session_id: amplitude.getSessionId(),
+      });
+
       addToRecentlyViewed(product);
     }
-  }, [product, addToRecentlyViewed]);
+  }, [product, addToRecentlyViewed, recentlyViewed]);
+
+  useEffect(() => {
+    const reviewsElement = reviewsRef.current;
+    if (!reviewsElement || !product) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          const timeOnPageSec = (Date.now() - pageLoadTime) / 1000;
+          amplitude.track("product_reviews_viewed", {
+            product_id: product.id,
+            trigger_method: "scroll_into_view",
+            review_count: product.reviewCount,
+            average_rating: product.rating,
+            time_on_page_sec: timeOnPageSec,
+            session_id: amplitude.getSessionId(),
+          });
+          observer.disconnect(); // Fire only once
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    observer.observe(reviewsElement);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [product, pageLoadTime]);
 
   if (!product) {
     notFound();
@@ -42,7 +103,10 @@ export default function ProductDetailPage({
 
       <div className="grid md:grid-cols-2 gap-8 mt-4">
         {/* Image */}
-        <div className="aspect-[4/5] bg-gray-100 rounded-lg overflow-hidden">
+        <div
+          className="aspect-[4/5] bg-gray-100 rounded-lg overflow-hidden cursor-pointer"
+          onClick={handleImageInteraction}
+        >
           <img
             src={product.image}
             alt={product.name}
@@ -58,7 +122,7 @@ export default function ProductDetailPage({
           </div>
           <h1 className="text-2xl font-bold mb-4">{product.name}</h1>
 
-          <div className="flex items-center gap-2 mb-4">
+          <div ref={reviewsRef} className="flex items-center gap-2 mb-4">
             <span className="text-yellow-400">★</span>
             <span className="text-sm text-gray-600">
               {product.rating} ({product.reviewCount} reviews)
@@ -67,11 +131,11 @@ export default function ProductDetailPage({
 
           <div className="flex items-center gap-3 mb-6">
             <span className="text-2xl font-bold">
-              {`$${product.price.toFixed(2)}`}
+              {`${product.price.toFixed(2)}`}
             </span>
             {product.originalPrice && (
               <span className="text-lg text-gray-400 line-through">
-                {`$${product.originalPrice.toFixed(2)}`}
+                {`${product.originalPrice.toFixed(2)}`}
               </span>
             )}
           </div>
