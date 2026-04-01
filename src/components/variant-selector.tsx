@@ -1,5 +1,6 @@
 "use client";
 
+import * as amplitude from "@amplitude/analytics-browser";
 import { useState } from "react";
 import { Product } from "@/lib/types";
 
@@ -12,11 +13,25 @@ export function VariantSelector({ product }: VariantSelectorProps) {
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
 
   const handleSizeSelect = (size: string) => {
+    const isFirstSelection = selectedSize === null;
     setSelectedSize(size);
+    amplitude.track('product_variant_selected', {
+      product_id: product.id,
+      variant_type: 'size',
+      variant_value: size,
+      is_first_selection: isFirstSelection,
+    });
   };
 
   const handleColorSelect = (color: string) => {
+    const isFirstSelection = selectedColor === null;
     setSelectedColor(color);
+    amplitude.track('product_variant_selected', {
+      product_id: product.id,
+      variant_type: 'color',
+      variant_value: color,
+      is_first_selection: isFirstSelection,
+    });
   };
 
   return (
