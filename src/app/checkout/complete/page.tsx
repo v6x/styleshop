@@ -1,12 +1,22 @@
 "use client";
 
-import { Suspense } from "react";
+import * as amplitude from '@amplitude/analytics-browser';
+import { Suspense, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
 function OrderComplete() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId") || "N/A";
+
+  useEffect(() => {
+    if (orderId && orderId !== "N/A") {
+      amplitude.track('purchase_completed', {
+        order_id: orderId,
+        session_id: amplitude.getSessionId() ?? "N/A",
+      });
+    }
+  }, [orderId]);
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-16 text-center">
