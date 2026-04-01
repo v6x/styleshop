@@ -1,5 +1,6 @@
 "use client";
 
+import * as amplitude from '@amplitude/analytics-browser';
 import { use, useEffect } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -58,7 +59,17 @@ export default function ProductDetailPage({
           </div>
           <h1 className="text-2xl font-bold mb-4">{product.name}</h1>
 
-          <div className="flex items-center gap-2 mb-4">
+          <div
+            className="flex items-center gap-2 mb-4 cursor-pointer"
+            onClick={() => {
+              amplitude.track('product_rating_clicked', {
+                product_id: product.id,
+                product_name: product.name,
+                product_category: product.category,
+                rating: product.rating,
+              });
+            }}
+          >
             <span className="text-yellow-400">★</span>
             <span className="text-sm text-gray-600">
               {product.rating} ({product.reviewCount} reviews)
@@ -67,11 +78,11 @@ export default function ProductDetailPage({
 
           <div className="flex items-center gap-3 mb-6">
             <span className="text-2xl font-bold">
-              {`$${product.price.toFixed(2)}`}
+              {`${product.price.toFixed(2)}`}
             </span>
             {product.originalPrice && (
               <span className="text-lg text-gray-400 line-through">
-                {`$${product.originalPrice.toFixed(2)}`}
+                {`${product.originalPrice.toFixed(2)}`}
               </span>
             )}
           </div>
