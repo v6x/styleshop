@@ -1,5 +1,6 @@
 "use client";
 
+import * as amplitude from '@amplitude/analytics-browser';
 import { useState } from "react";
 import { Product } from "@/lib/types";
 
@@ -13,6 +14,11 @@ export function VariantSelector({ product }: VariantSelectorProps) {
 
   const handleSizeSelect = (size: string) => {
     setSelectedSize(size);
+    amplitude.track('size_selected', {
+      product_id: product.id,
+      product_name: product.name,
+      size: size,
+    });
   };
 
   const handleColorSelect = (color: string) => {
