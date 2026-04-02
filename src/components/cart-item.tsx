@@ -1,5 +1,6 @@
 "use client";
 
+import * as amplitude from '@amplitude/analytics-browser';
 import { CartItem as CartItemType } from "@/lib/types";
 import { useCart } from "@/lib/cart-store";
 
@@ -8,10 +9,22 @@ export function CartItem({ item }: { item: CartItemType }) {
 
   const handleQuantityChange = (newQuantity: number) => {
     updateQuantity(item.product.id, newQuantity);
+    amplitude.track('cart_item_quantity_updated', {
+      product_id: item.product.id,
+      product_name: item.product.name,
+      new_quantity: newQuantity,
+      price: item.product.price,
+    });
   };
 
   const handleRemove = () => {
     removeItem(item.product.id);
+    amplitude.track('cart_item_removed', {
+      product_id: item.product.id,
+      product_name: item.product.name,
+      price: item.product.price,
+      category: item.product.category,
+    });
   };
 
   return (
@@ -27,7 +40,7 @@ export function CartItem({ item }: { item: CartItemType }) {
           {item.product.name}
         </h3>
         <p className="text-sm font-bold mt-1">
-          {`$${item.product.price.toFixed(2)}`}
+          {`${item.product.price.toFixed(2)}`}
         </p>
       </div>
       <div className="flex items-center gap-2">
