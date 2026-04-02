@@ -14,6 +14,7 @@ export function CartItem({ item }: { item: CartItemType }) {
       product_name: item.product.name,
       new_quantity: newQuantity,
       price: item.product.price,
+      size: item.product.sizes,
     });
   };
 
