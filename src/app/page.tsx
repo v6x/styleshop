@@ -1,5 +1,6 @@
 "use client";
 
+import * as amplitude from '@amplitude/analytics-browser';
 import Link from "next/link";
 import { products } from "@/lib/products";
 import { ProductCard } from "@/components/product-card";
@@ -43,6 +44,12 @@ export default function HomePage() {
           <Link
             href="/products"
             className="text-sm text-gray-600 hover:text-gray-900"
+            onClick={() => {
+              amplitude.track('view_all_products_clicked', {
+                source: 'featured_products',
+                destination: '/products',
+              });
+            }}
           >
             View All →
           </Link>
