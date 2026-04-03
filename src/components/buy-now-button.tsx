@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import * as amplitude from "@amplitude/analytics-browser";
 import { Product } from "@/lib/types";
 import { useCart } from "@/lib/cart-store";
 
@@ -9,6 +10,12 @@ export function BuyNowButton({ product }: { product: Product }) {
   const { addItem } = useCart();
 
   const handleClick = () => {
+    amplitude.track("buy_now_clicked", {
+      product_id: product.id,
+      product_name: product.name,
+      price: product.price,
+      category: product.category,
+    });
     addItem(product);
     router.push("/checkout");
   };
