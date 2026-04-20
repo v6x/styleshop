@@ -11,6 +11,10 @@ export function AddToCartButton({ product }: { product: Product }) {
       window.parent.postMessage({ type: "no_event", action: "click", component: "Add to Cart button" }, "*");
     }
     addItem(product);
+    amplitude.track('add_to_cart', {
+      product_id: product.id,
+      product_name: product.name,
+    });
   };
 
   return (
