@@ -17,6 +17,8 @@ export function AddToCartButton({ product }: { product: Product }) {
       product_name: product.name,
       product_category: product.category,
       price: product.price,
+      variant_color: product.variant_color,
+      variant_size: product.variant_size,
       currency: "USD",
       quantity: 1,
       source_page: window.location.pathname
