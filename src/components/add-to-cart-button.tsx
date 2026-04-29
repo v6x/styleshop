@@ -11,6 +11,15 @@ export function AddToCartButton({ product }: { product: Product }) {
       window.parent.postMessage({ type: "no_event", action: "click", component: "Add to Cart button" }, "*");
     }
     addItem(product);
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "product_added_to_cart",
+      product_id: product.id,
+      product_name: product.name,
+      product_category: product.category,
+      price: product.price,
+      quantity: 1,
+    });
   };
 
   return (
