@@ -18,6 +18,8 @@ export function AddToCartButton({ product }: { product: Product }) {
       product_category: product.category,
       price: product.price,
       original_price: product.originalPrice,
+      variant_size: product.variantSize,
+      variant_color: product.variantColor,
       currency: "USD",
       quantity: 1,
     });
