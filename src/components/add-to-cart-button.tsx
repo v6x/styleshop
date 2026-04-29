@@ -1,5 +1,6 @@
 "use client";
 
+import * as amplitude from '@amplitude/analytics-browser';
 import { Product } from "@/lib/types";
 import { useCart } from "@/lib/cart-store";
 
@@ -11,6 +12,16 @@ export function AddToCartButton({ product }: { product: Product }) {
       window.parent.postMessage({ type: "no_event", action: "click", component: "Add to Cart button" }, "*");
     }
     addItem(product);
+    amplitude.track('product_added_to_cart', {
+      product_id: product.id,
+      product_name: product.name,
+      product_category: product.category,
+      price: product.price,
+      currency: "USD",
+      quantity: 1,
+      is_on_sale: !!product.originalPrice,
+      original_price: product.originalPrice,
+    });
   };
 
   return (
