@@ -12,12 +12,19 @@ export function AddToCartButton({ product }: { product: Product }) {
       window.parent.postMessage({ type: "no_event", action: "click", component: "Add to Cart button" }, "*");
     }
     addItem(product);
+    const urlParams = new URLSearchParams(window.location.search);
     amplitude.track('product_added_to_cart', {
       product_id: product.id,
       product_name: product.name,
       product_category: product.category,
       price: product.price,
       quantity: 1,
+      traffic_source: document.referrer,
+      utm_source: urlParams.get('utm_source'),
+      utm_medium: urlParams.get('utm_medium'),
+      utm_campaign: urlParams.get('utm_campaign'),
+      utm_term: urlParams.get('utm_term'),
+      utm_content: urlParams.get('utm_content'),
     });
   };
 
